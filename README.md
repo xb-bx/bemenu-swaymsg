@@ -1,6 +1,8 @@
 bemenu
 ======
 
+My patched bemenu to run programs with "swaymsg exec ..."
+
 Dynamic menu library and client program inspired by dmenu
 
 ![preview](.github/preview.svg)

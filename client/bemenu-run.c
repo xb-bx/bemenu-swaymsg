@@ -142,11 +142,19 @@ launch(const struct client *client, const char *bin)
             ignore_ret(0, freopen("/dev/null", "w", stdout));
             ignore_ret(0, freopen("/dev/null", "w", stderr));
         }
-
         char **tokens;
-        if (!(tokens = tokenize_quoted_to_argv(bin, NULL, NULL)))
+        int tokensc = 0;
+        if (!(tokens = tokenize_quoted_to_argv(bin, "swaymsg", &tokensc)))
             _exit(EXIT_FAILURE);
-
+        tokens = reallocarray(tokens, sizeof(char*), tokensc + 2); 
+        for(int i = tokensc-1; i >= 1; i--)
+        {
+            tokens[i + 1] = tokens[i];
+        }
+        tokens[1] = "exec";
+        for(int i = 0; i < tokensc + 1; i++)
+            printf("%s\n", tokens[i]);
+        tokens[tokensc + 1] = NULL;
         execvp(tokens[0], tokens);
         _exit(EXIT_SUCCESS);
     }
